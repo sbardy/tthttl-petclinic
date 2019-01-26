@@ -1,0 +1,20 @@
+version: "3"
+services:
+    config-service:
+        build: ./config-service/.
+        image: tthttl/config-service
+        ports: 
+            - "8888:8888"
+        networks:
+            - internal
+    discovery-service:
+        build: ./discovery-service/.
+        image: tthttl/discovery-service
+        ports:
+            - "8761:8761"
+        depends_on: 
+            - config-service
+        networks:
+            - internal
+networks:
+    internal:
