@@ -16,5 +16,15 @@ services:
             - config-service
         networks:
             - internal
+    gateway-service:
+        build: ./gateway-service/.
+        image: tthttl/gateway-service
+        ports:
+            - "8080:8080"
+        depends_on:
+            - config-service
+            - discovery-service
+        networks:
+            - internal
 networks:
     internal:
