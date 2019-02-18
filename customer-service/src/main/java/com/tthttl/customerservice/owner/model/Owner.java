@@ -1,5 +1,6 @@
 package com.tthttl.customerservice.owner.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tthttl.customerservice.pet.model.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +41,8 @@ public class Owner {
     @Digits(fraction = 0, integer = 10)
     private String telephone;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets = new HashSet<>();
 
     public void addPet(Pet pet) {

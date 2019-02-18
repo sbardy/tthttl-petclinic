@@ -1,5 +1,6 @@
 package com.tthttl.customerservice.pet.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tthttl.customerservice.owner.model.Owner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -21,14 +24,18 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String name;
 
+    @NotNull
     private LocalDate birthDate;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "pet_type_id")
     private PetType type;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;

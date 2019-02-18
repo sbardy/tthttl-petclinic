@@ -68,7 +68,7 @@ public class OwnerController {
     }
 
     private ResourceNotFoundException createResourceNotFoundException(Long id){
-        return new ResourceNotFoundException(String.valueOf(id), getClass().toString());
+        return new ResourceNotFoundException(String.valueOf(id), Owner.class.toString());
     }
 
 
