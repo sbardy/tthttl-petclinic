@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS petclinic;
-GRANT ALL PRIVILEGES ON petclinic.* TO 'root'@'%' IDENTIFIED BY '1234';
-
 USE petclinic;
 
 CREATE TABLE IF NOT EXISTS owners

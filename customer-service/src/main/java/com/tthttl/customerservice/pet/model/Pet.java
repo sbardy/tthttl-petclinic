@@ -2,10 +2,7 @@ package com.tthttl.customerservice.pet.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tthttl.customerservice.owner.model.Owner;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(exclude = "owner")
+@ToString(exclude = "owner")
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "pets")
@@ -31,7 +29,7 @@ public class Pet {
     private LocalDate birthDate;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "pet_type_id")
     private PetType type;
 

@@ -41,12 +41,12 @@ VALUES (7, 'Samantha', '1995-09-04', 1, 6);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
 VALUES (8, 'Max', '1995-09-04', 1, 6);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
-VALUES (9, 'Lucky', '1999-08-06', 5, 7);
+VALUES (9, 'Lucky', '1999-08-06', 5, 1);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
-VALUES (10, 'Mulligan', '1997-02-24', 2, 8);
+VALUES (10, 'Mulligan', '1997-02-24', 2, 2);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
-VALUES (11, 'Freddy', '2000-03-09', 5, 9);
+VALUES (11, 'Freddy', '2000-03-09', 5, 3);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
-VALUES (12, 'Lucky', '2000-06-24', 2, 10);
+VALUES (12, 'Lucky', '2000-06-24', 2, 4);
 INSERT  INTO pets (id, name, birth_date, pet_type_id, owner_id)
-VALUES (13, 'Sly', '2002-06-08', 1, 10);
+VALUES (13, 'Sly', '2002-06-08', 1, 5);
