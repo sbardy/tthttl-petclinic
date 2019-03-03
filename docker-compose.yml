@@ -54,8 +54,31 @@ services:
             - customer-db
         networks:
             - internal
+    vet-db:
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: vetdb
+        networks:
+            - internal
+        volumes:
+            - ./vet-service:/docker-entrypoint-initdb.d
+            - vet-data:/var/lib/mysql
+    vet-service:
+        build: ./vet-service/.
+        image: tthttl/vet-service
+        ports:
+            - "8090:8090"
+        depends_on:
+            - config-service
+            - discovery-service
+            - vet-db
+        networks:
+            - internal
 volumes:
     customer-data:
+    vet-data:
 
 networks:
     internal:
