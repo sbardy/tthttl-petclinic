@@ -57,4 +57,14 @@ public class VetController {
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id), getClass().toString()));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        return vetService.findById(id)
+                .map(vetToDelete -> {
+                    vetService.delete(vetToDelete);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id), getClass().toString()));
+    }
+
 }

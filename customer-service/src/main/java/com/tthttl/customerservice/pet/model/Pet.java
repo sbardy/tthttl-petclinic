@@ -29,7 +29,7 @@ public class Pet {
     private LocalDate birthDate;
 
     @NotNull
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "pet_type_id")
     private PetType type;
 

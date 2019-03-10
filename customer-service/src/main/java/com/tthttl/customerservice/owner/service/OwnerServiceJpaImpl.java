@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Profile({"docker", "dev", "h2"})
+@Profile({"docker", "dev", "h2", "localhost"})
 @Service
 public class OwnerServiceJpaImpl implements OwnerService {
 

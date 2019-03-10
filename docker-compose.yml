@@ -76,9 +76,32 @@ services:
             - vet-db
         networks:
             - internal
+    visit-db:
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: visitdb
+        networks:
+            - internal
+        volumes:
+            - ./visit-service:/docker-entrypoint-initdb.d
+            - visit-data:/var/lib/mysql
+    visit-service:
+        build: ./visit-service/.
+        image: tthttl/visit-service
+        ports:
+            - "9000:9000"
+        depends_on:
+            - config-service
+            - discovery-service
+            - visit-db
+        networks:
+            - internal
 volumes:
     customer-data:
     vet-data:
+    visit-data:
 
 networks:
     internal:

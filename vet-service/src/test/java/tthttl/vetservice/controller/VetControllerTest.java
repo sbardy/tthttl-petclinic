@@ -6,12 +6,13 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tthttl.vetservice.model.Vet;
 import tthttl.vetservice.service.VetService;
@@ -20,7 +21,9 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,9 +38,9 @@ class VetControllerTest {
     @InjectMocks
     private VetController testee;
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    Vet vet;
+    private Vet vet;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +50,7 @@ class VetControllerTest {
 
     @Test
     void saveVet() throws Exception {
-        when(vetService.save(Mockito.any())).thenReturn(vet);
+        when(vetService.save(any())).thenReturn(vet);
 
         mockMvc.perform
                 (post("/vets")
@@ -65,7 +68,7 @@ class VetControllerTest {
 
     @Test
     void findById() throws Exception {
-        when(vetService.findById(Mockito.any())).thenReturn(Optional.of(vet));
+        when(vetService.findById(any())).thenReturn(Optional.of(vet));
 
         mockMvc.perform(get("/vets/1"))
                 .andExpect(status().isOk())
@@ -88,8 +91,8 @@ class VetControllerTest {
         Vet updatedVet = new Vet();
         String updatedName = "Morty";
         updatedVet.setFirstName(updatedName);
-        when(vetService.findById(Mockito.any())).thenReturn(Optional.of(vet));
-        when(vetService.save(Mockito.any())).thenReturn(updatedVet);
+        when(vetService.findById(any())).thenReturn(Optional.of(vet));
+        when(vetService.save(any())).thenReturn(updatedVet);
 
         mockMvc.perform(
                 put("/vets/1")
@@ -97,6 +100,17 @@ class VetControllerTest {
                         .content(createRequestBody(vet)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", is(updatedName)));
+    }
+
+    @Test
+    void delete() throws Exception {
+        when(vetService.findById(any())).thenReturn(Optional.of(vet));
+        ArgumentCaptor<Vet> argumentCaptor = ArgumentCaptor.forClass(Vet.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/vets/1"))
+                .andExpect(status().isNoContent());
+        verify(vetService, times(1)).delete(argumentCaptor.capture());
+        assertEquals(vet, argumentCaptor.getValue());
     }
 
     private String createRequestBody(Vet vet) throws JsonProcessingException {

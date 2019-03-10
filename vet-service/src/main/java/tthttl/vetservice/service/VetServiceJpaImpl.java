@@ -8,7 +8,7 @@ import tthttl.vetservice.repository.VetRepository;
 import java.util.List;
 import java.util.Optional;
 
-@Profile({"docker", "h2", "dev"})
+@Profile({"docker", "h2", "dev", "localhost"})
 @Service
 public class VetServiceJpaImpl implements VetService {
 

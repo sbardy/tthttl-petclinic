@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Profile({"dev", "docker", "h2"})
+@Profile({"dev", "docker", "h2", "localhost"})
 @Service
 public class PetServiceJpaImpl implements PetService {
 

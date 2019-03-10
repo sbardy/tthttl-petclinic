@@ -42,5 +42,21 @@ eureka:
     enabled: false
 ---
 spring:
+  profiles: localhost
+  datasource:
+    platform: h2
+  application:
+    name: customer-service
+  cloud:
+    config:
+      uri: "http://localhost:8888"
+      failFast: true
+      retry:
+        initialInterval: 3000
+        multiplier: 1.3
+        maxInterval: 5000
+        maxAttempts: 20
+---
+spring:
   profiles:
-    active: docker
+    active: localhost
