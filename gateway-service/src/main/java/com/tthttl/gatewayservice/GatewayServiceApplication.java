@@ -20,10 +20,24 @@ public class GatewayServiceApplication {
     @Bean
     public RouteLocator getRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(predicateSpec -> predicateSpec.path("/get").uri("http://httpbin.org:80"))
+                .route("owners", predicateSpec -> predicateSpec
+                        .path("/owners/**")
+                        .uri("lb://customer-service")
+                )
+                .route("pets", predicateSpec -> predicateSpec
+                        .path("/pets/**")
+                        .uri("lb://customer-service")
+                )
+                .route("vets", predicateSpec -> predicateSpec
+                        .path("/vets/**")
+                        .uri("lb://vet-service")
+                )
+                .route("visits", predicateSpec -> predicateSpec
+                        .path("/visits/**")
+                        .uri("lb://visit-service")
+                )
                 .build();
     }
-
 
 }
 
