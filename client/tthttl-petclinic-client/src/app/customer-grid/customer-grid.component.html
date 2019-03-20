@@ -1,7 +1,16 @@
 <ag-grid-angular 
-    style="width: 1000px; height: 400px;" 
+    style="width: fit-content; height: 100%;" 
     class="ag-theme-balham"
-    [rowData]="rowData | async"
-    [columnDefs]="columnDefs"
+    [rowData]="rowDataOwners"
+    [columnDefs]="columnDefsOwners"
+    >
+</ag-grid-angular>
+<br>
+<br>
+<ag-grid-angular 
+    style="width: fit-content; height: 100%;" 
+    class="ag-theme-balham"
+    [rowData]="rowDataPets"
+    [columnDefs]="columnDefsPets"
     >
 </ag-grid-angular>
