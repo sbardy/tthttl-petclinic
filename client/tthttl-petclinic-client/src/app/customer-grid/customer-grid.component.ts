@@ -37,6 +37,7 @@ export class CustomerGridComponent implements OnInit {
     this.httpClient.get('http://localhost:8080/owners').subscribe((owners: Owner[]) => {
       owners.map(owner => {
         const ownerRow: OwnerRow = {
+          id: owner.id,
           firstName: owner.firstName,
           lastName: owner.lastName,
           address: owner.address,
@@ -51,9 +52,10 @@ export class CustomerGridComponent implements OnInit {
     this.httpClient.get('http://localhost:8080/pets').subscribe((pets: Pet[]) => {
       pets.map(pet => {
         const petRow: PetRow = {
+          id: pet.id,
           name: pet.name,
           birthdate: pet.birthDate,
-          type: pet.petType.name,
+          type: pet.type ? pet.type.name : '',
           owner: pet.owner
         };
         this.petRows.push(petRow);

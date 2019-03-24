@@ -1,11 +1,13 @@
 export interface Pet {
+    id: string;
     name: string;
     birthDate: string;
-    petType: PetType;
+    type: PetType;
     owner: string;
 }
 
 export interface Owner {
+    id: string;
     firstName: string;
     lastName: string;
     address: string;
@@ -15,6 +17,7 @@ export interface Owner {
 }
 
 export interface OwnerRow {
+    id: string;
     firstName: string;
     lastName: string;
     address: string;
@@ -29,6 +32,7 @@ export interface PetType {
 }
 
 export interface PetRow {
+    id: string;
     name: string;
     birthdate: string;
     type: string;

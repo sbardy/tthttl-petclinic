@@ -1,0 +1,29 @@
+<h2>Pet Details</h2>
+<form class="formGroup" [formGroup]="petFormGroup" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" formControlName="name" required>
+  </div>
+  <div class="form-group">
+    <label for="birthDate">Birth Date</label>
+    <input type="text" class="form-control" id="birthDate" formControlName="birthDate" placeholder="e.g.: 2000-01-01"
+      required>
+  </div>
+  <div class="form-group">
+    <label for="petType">Type</label>
+    <select class="custom-select" formControlName="petType">
+      <option selected>Please select</option>
+      <option *ngFor="let petType of petTypes" [class.selected]="petType.id === selectedId" [ngValue]="petType">
+        {{petType.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="owner">Owner</label>
+    <select class="custom-select" formControlName="owner">
+      <option selected>Please select</option>
+      <option *ngFor="let owner of owners" [class.selected]="owner.id === selectedId" [ngValue]="owner">
+        {{owner.firsName}} {{owner.lastName}} </option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="!petFormGroup.valid">Create</button>
+</form>

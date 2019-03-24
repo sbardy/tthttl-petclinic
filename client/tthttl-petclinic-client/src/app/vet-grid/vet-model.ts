@@ -4,12 +4,14 @@ export interface Specialty {
 }
 
 export interface Vet {
+    id: string;
     firstName: string;
     lastName: string;
     specialties: Specialty[];
 }
 
 export interface VetRow {
+    id: string;
     firstName: string;
     lastName: string;
     specialties: string;

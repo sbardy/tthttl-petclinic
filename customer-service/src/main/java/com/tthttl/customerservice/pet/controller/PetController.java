@@ -5,7 +5,9 @@ import com.tthttl.customerservice.owner.model.Owner;
 import com.tthttl.customerservice.owner.service.OwnerService;
 import com.tthttl.customerservice.pet.model.Pet;
 import com.tthttl.customerservice.pet.model.PetResponse;
+import com.tthttl.customerservice.pet.model.PetType;
 import com.tthttl.customerservice.pet.service.PetService;
+import com.tthttl.customerservice.pet.service.PetTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -21,10 +23,12 @@ public class PetController {
 
     private final PetService petService;
     private final OwnerService ownerService;
+    private final PetTypeService petTypeService;
 
-    public PetController(PetService petService, OwnerService ownerService) {
+    public PetController(PetService petService, OwnerService ownerService, PetTypeService petTypeService) {
         this.petService = petService;
         this.ownerService = ownerService;
+        this.petTypeService = petTypeService;
     }
 
     @PostMapping("owner/{id}")
@@ -81,6 +85,11 @@ public class PetController {
                     return ResponseEntity.created(location).body(PetResponse.map(updatedPet));
                 })
                 .orElseThrow(() -> createPetNotFoundException(id));
+    }
+
+    @GetMapping("/pet-types")
+    public ResponseEntity<List<PetType>> findAllPetTypes(){
+        return ResponseEntity.ok().body(petTypeService.findAll());
     }
 
     private ResourceNotFoundException createPetNotFoundException(Long id) {

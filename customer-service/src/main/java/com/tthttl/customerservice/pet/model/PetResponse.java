@@ -15,7 +15,7 @@ public class PetResponse {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    private PetType petType;
+    private PetType type;
 
     private String owner;
 
@@ -25,7 +25,7 @@ public class PetResponse {
         petResponse.birthDate = petToCopy.getBirthDate();
         petResponse.name = petToCopy.getName();
         petResponse.owner = petToCopy.getOwner().getFirstName() + " " + petToCopy.getOwner().getLastName();
-        petResponse.petType = petToCopy.getType();
+        petResponse.type = petToCopy.getType();
         return petResponse;
     }
 

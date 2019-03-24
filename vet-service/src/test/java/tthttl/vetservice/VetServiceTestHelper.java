@@ -10,6 +10,7 @@ public class VetServiceTestHelper {
 
     public static Long ID = 1L;
     public static int VET_DATA_SQL_SIZE = 6;
+    public static int SPECIALTY_DATA_SQL_SIZE = 3;
 
     public static Vet createVet() {
         Vet vet = new Vet();
@@ -26,9 +27,7 @@ public class VetServiceTestHelper {
     }
 
     public static Specialty createSpecialty(){
-        Specialty specialty = new Specialty();
-        specialty.setId(1L);
-        specialty.setName("petDoctor");
+        Specialty specialty = new Specialty(1L, "petDoctor");
         return specialty;
     }
 

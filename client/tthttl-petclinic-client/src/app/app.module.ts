@@ -10,6 +10,11 @@ import {AgGridModule} from 'ag-grid-angular';
 import {HttpClientModule} from '@angular/common/http';
 import {VetGridComponent} from './vet-grid/vet-grid.component';
 import {VisitGridComponent} from './visit-grid/visit-grid.component';
+import {OwnerFormComponent} from './owner-form/owner-form.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {PetFormComponent} from './pet-form/pet-form.component';
+import {VetFormComponent} from './vet-form/vet-form.component';
+import {VisitFormComponent} from './visit-form/visit-form.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +22,18 @@ import {VisitGridComponent} from './visit-grid/visit-grid.component';
     WelcomeComponent,
     CustomerGridComponent,
     VetGridComponent,
-    VisitGridComponent
+    VisitGridComponent,
+    OwnerFormComponent,
+    PetFormComponent,
+    VetFormComponent,
+    VisitFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

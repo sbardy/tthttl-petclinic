@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -79,6 +80,19 @@ public class VisitController {
                     return ResponseEntity.ok().body(new VisitResponse(foundVisit, petResponse));
                 })
                 .orElseThrow(() -> createResourceNotFoundException(String.valueOf(id)));
+    }
+
+    @GetMapping("/with-pet")
+    public ResponseEntity<List<VisitResponse>> getVisitsWithPet() {
+        List<Visit> visits = visitService.findAll();
+        List<PetResponse> pets = customerClient.findAllPets();
+        List<VisitResponse> visitResponses = new ArrayList<>();
+        visits.forEach(visit -> {
+            pets.stream()
+                    .filter(pet -> pet.getId().equals(visit.getPetId()))
+                    .forEach(pet -> visitResponses.add(new VisitResponse(visit, pet)));
+        });
+        return ResponseEntity.ok().body(visitResponses);
     }
 
     //TODO implement with tests

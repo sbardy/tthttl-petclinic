@@ -8,6 +8,7 @@ import com.tthttl.customerservice.owner.model.Owner;
 import com.tthttl.customerservice.owner.service.OwnerService;
 import com.tthttl.customerservice.pet.model.Pet;
 import com.tthttl.customerservice.pet.service.PetService;
+import com.tthttl.customerservice.pet.service.PetTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static com.tthttl.customerservice.CustomerServiceTestsHelper.*;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -39,6 +41,9 @@ class PetControllerTest {
 
     @Mock
     private OwnerService ownerService;
+
+    @Mock
+    private PetTypeService petTypeService;
 
     @InjectMocks
     private PetController testee;
@@ -118,6 +123,15 @@ class PetControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(updatedPet.getName())))
                 .andExpect(jsonPath("$.owner", is(owner.getFirstName() + " " + owner.getLastName())));
+    }
+
+    @Test
+    void findAllPetTypes() throws Exception {
+        when(petTypeService.findAll()).thenReturn(createPetTypes());
+
+        mockMvc.perform(get("/pets/pet-types"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
     private String createRequestBody(Pet pet) throws JsonProcessingException {

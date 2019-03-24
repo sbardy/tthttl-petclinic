@@ -5,25 +5,32 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tthttl.vetservice.exception.ResourceNotFoundException;
+import tthttl.vetservice.model.Specialty;
 import tthttl.vetservice.model.Vet;
+import tthttl.vetservice.service.SpecialtyService;
 import tthttl.vetservice.service.VetService;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/vets")
 public class VetController {
 
     private final VetService vetService;
+    private final SpecialtyService specialtyService;
 
-    public VetController(VetService vetService) {
+    public VetController(VetService vetService, SpecialtyService specialtyService) {
         this.vetService = vetService;
+        this.specialtyService = specialtyService;
     }
 
     @PostMapping
     public ResponseEntity<Vet> saveVet(@Valid @RequestBody Vet vet) {
+        vet.setSpecialties(reAttachExistingSpecialties(vet.getSpecialties()));
         Vet savedVet = vetService.save(vet);
         URI location = MvcUriComponentsBuilder
                 .fromController(getClass())
@@ -65,6 +72,28 @@ public class VetController {
                     return ResponseEntity.noContent().build();
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id), getClass().toString()));
+    }
+
+    @GetMapping("/specialties")
+    public ResponseEntity<List<Specialty>> findAllSpecialties() {
+        return ResponseEntity.ok().body(specialtyService.findAll());
+    }
+
+    private Set<Specialty> reAttachExistingSpecialties(Set<Specialty> mixedSpecialties){
+        List<Specialty> existingSpecialties = specialtyService.findAll();
+        Set<Specialty> specialtiesToSave = new HashSet<>();
+        mixedSpecialties.forEach(specialty -> {
+            if(specialty.getId() != null){
+                Specialty matchingSpecialty = existingSpecialties.stream()
+                        .filter(existing -> existing.getId().equals(specialty.getId()))
+                        .findFirst()
+                        .get();
+                specialtiesToSave.add(matchingSpecialty);
+            } else {
+                specialtiesToSave.add(specialty);
+            }
+        });
+        return specialtiesToSave;
     }
 
 }

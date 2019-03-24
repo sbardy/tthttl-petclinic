@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Specialty, Vet, VetRow} from './vet-model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-vet-grid',
@@ -8,6 +9,8 @@ import {Specialty, Vet, VetRow} from './vet-model';
   styleUrls: ['./vet-grid.component.scss']
 })
 export class VetGridComponent implements OnInit {
+
+  private gridApi;
 
   columnDefs = [
     { headerName: 'First Name', field: 'firstName', sortable: true, filter: true },
@@ -18,12 +21,19 @@ export class VetGridComponent implements OnInit {
   rowData: any;
   vetRows: VetRow[] = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router) { }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+  }
 
   ngOnInit() {
     this.httpClient.get('http://localhost:8080/vets').subscribe((data: Vet[]) => {
       data.map(vet => {
         const row: VetRow = {
+          id: vet.id,
           firstName: vet.firstName,
           lastName: vet.lastName,
           specialties: this.appendSpecialties(vet.specialties)
@@ -44,6 +54,11 @@ export class VetGridComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  getSelectedRowData() {
+    const selected: VetRow = this.gridApi.getSelectedRows().pop();
+    this.router.navigate(['/form/vets/'.concat(selected.id)]);
   }
 
 }

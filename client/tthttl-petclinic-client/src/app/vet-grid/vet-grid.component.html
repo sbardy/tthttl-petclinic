@@ -2,6 +2,10 @@
 <ag-grid-angular style="width: fit-content; height: 100%;"
  class="ag-theme-balham"
  [rowData]="rowData"
- [columnDefs]="columnDefs">
+ [columnDefs]="columnDefs"
+ [rowSelection]="'single'"
+ (selectionChanged)="getSelectedRowData($event)"
+ (gridReady)="onGridReady($event)"
+ >
 </ag-grid-angular>
 </div>
