@@ -1,19 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
 import {Owner} from '../customer-grid/customer.model';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RestClient} from '../services/rest-client.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-owner-form',
   templateUrl: './owner-form.component.html',
   styleUrls: ['./owner-form.component.scss']
 })
-export class OwnerFormComponent implements OnInit {
+export class OwnerFormComponent implements OnInit, OnDestroy {
 
   constructor(
-    private httpClient: HttpClient,
-    private router: Router) { }
+    private restClient: RestClient,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ownerFormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
@@ -23,7 +25,24 @@ export class OwnerFormComponent implements OnInit {
     telephone: new FormControl('', [Validators.required, Validators.pattern('[0-9]{9}')])
   });
 
+  private isUpdate: boolean;
+  private ownerId: string;
+  private subscriptions: Subscription[] = [];
+
   ngOnInit() {
+    this.subscriptions.push(this.activatedRoute.params.subscribe(params => {
+      this.ownerId = params.id;
+      if (this.ownerId) {
+        this.restClient.getOwner(this.ownerId).subscribe((owner: Owner) => {
+          this.isUpdate = true;
+          this.ownerFormGroup.controls.firstName.setValue(owner.firstName);
+          this.ownerFormGroup.controls.lastName.setValue(owner.lastName);
+          this.ownerFormGroup.controls.address.setValue(owner.address);
+          this.ownerFormGroup.controls.city.setValue(owner.city);
+          this.ownerFormGroup.controls.telephone.setValue(owner.telephone);
+        });
+      }
+    }));
   }
 
   onSubmit() {
@@ -36,11 +55,21 @@ export class OwnerFormComponent implements OnInit {
       telephone: this.ownerFormGroup.controls.telephone.value,
       pets: []
     };
-    this.httpClient.post('http://localhost:8080/owners', ownerToSave)
-      .subscribe(data => {
-        console.log(data);
-        this.router.navigate(['/customers']);
-      }, error => console.log(error));
+    if (this.isUpdate) {
+      this.subscriptions.push(this.restClient.updateOwner(this.ownerId, ownerToSave)
+        .subscribe(data => {
+          this.router.navigate(['/customers']);
+        }, error => console.log(error)));
+    } else {
+      this.subscriptions.push(this.restClient.saveOwner(ownerToSave)
+        .subscribe(data => {
+          this.router.navigate(['/customers']);
+        }, error => console.log(error)));
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

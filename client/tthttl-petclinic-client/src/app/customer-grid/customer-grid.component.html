@@ -1,16 +1,38 @@
+
+<br>
+<h2>Owners</h2>
+<div class="grid-container">
+<button type="button" class="btn btn-outline-info btn-sm" [disabled]="!isOwnerSelected()" 
+    (click)="updateSelectedOwner()">Update selected</button>
+<button type="button" class="btn btn-outline-info btn-sm" [disabled]="!isOwnerSelected()" 
+    (click)="deleteSelectedOwner()">Delete selected</button>
 <ag-grid-angular 
-    style="width: fit-content; height: 100%;" 
-    class="ag-theme-balham"
+    class="ag-theme-fresh"
     [rowData]="rowDataOwners"
     [columnDefs]="columnDefsOwners"
+    [rowSelection]="'single'"
+    (selectionChanged)="setSelectedOwnerRow($event)"
+    (gridReady)="onOwnerGridReady($event)"
+    suppressCellSelection="true"
     >
 </ag-grid-angular>
+</div>
 <br>
-<br>
+<h2>Pets</h2>
+<div class="grid-container">
+<button type="button" class="btn btn-outline-info btn-sm" [disabled]="!isPetSelected()" 
+    (click)="updateSelectedPet()">Update selected</button>
+<button type="button" class="btn btn-outline-info btn-sm" [disabled]="!isPetSelected()" 
+    (click)="deleteSelectedPet()">Delete selected</button>
 <ag-grid-angular 
-    style="width: fit-content; height: 100%;" 
-    class="ag-theme-balham"
+    style="height: 254px;"
+    class="ag-theme-fresh"
     [rowData]="rowDataPets"
     [columnDefs]="columnDefsPets"
+    [rowSelection]="'single'"
+    (selectionChanged)="setSelectedPetRow($event)"
+    (gridReady)="onPetGridReady($event)"
+    suppressCellSelection="true"
     >
 </ag-grid-angular>
+</div>

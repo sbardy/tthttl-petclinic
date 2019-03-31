@@ -1,3 +1,4 @@
+<br>
 <h2>Pet Details</h2>
 <form class="formGroup" [formGroup]="petFormGroup" (ngSubmit)="onSubmit()">
   <div class="form-group">
@@ -6,7 +7,7 @@
   </div>
   <div class="form-group">
     <label for="birthDate">Birth Date</label>
-    <input type="text" class="form-control" id="birthDate" formControlName="birthDate" placeholder="e.g.: 2000-01-01"
+    <input type="date" class="form-control" id="birthDate" formControlName="birthDate" placeholder="e.g.: 2000-01-01"
       required>
   </div>
   <div class="form-group">
@@ -25,5 +26,6 @@
         {{owner.firsName}} {{owner.lastName}} </option>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="!petFormGroup.valid">Create</button>
+  <button *ngIf="!isUpdate" type="submit" class="btn btn-primary" [disabled]="!petFormGroup.valid">Create</button>
+  <button *ngIf="isUpdate" type="submit" class="btn btn-primary" [disabled]="!petFormGroup.valid">Update</button>
 </form>

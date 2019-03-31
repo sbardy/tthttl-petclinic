@@ -1,26 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {VisitRow, VisitWithPet} from './visit.model';
 import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {RestClient} from '../services/rest-client.service';
 
 @Component({
   selector: 'app-visit-grid',
   templateUrl: './visit-grid.component.html',
   styleUrls: ['./visit-grid.component.scss']
 })
-export class VisitGridComponent implements OnInit {
+export class VisitGridComponent implements OnInit, OnDestroy {
 
   constructor(
-    private httpClient: HttpClient,
+    private restClient: RestClient,
     private router: Router) { }
 
   private gridApi;
   private selectedRow: VisitRow;
+  private subscriptions: Subscription[] = [];
 
   columnDefs = [
     {
       headerName: 'Visit details', children: [
-        { headerName: 'Date', field: 'date', sortable: true, filter: true },
+        { headerName: 'Date', field: 'date', sortable: true, filter: true, checkboxSelection: true },
         { headerName: 'Description', field: 'description', sortable: true, filter: true }
       ]
     },
@@ -32,15 +34,15 @@ export class VisitGridComponent implements OnInit {
     }
   ];
 
-  rowData: any;
-  visitRows: VisitRow[] = [];
+  private rowData: any;
+  private visitRows: VisitRow[] = [];
 
   onGridReady(params) {
     this.gridApi = params.api;
   }
 
   ngOnInit() {
-    this.httpClient.get('http://localhost:8080/visits/with-pet').subscribe((visits: VisitWithPet[]) => {
+    this.subscriptions.push(this.restClient.getVisitWithPets().subscribe((visits: VisitWithPet[]) => {
       visits.forEach(visit => {
         const visitRow: VisitRow = {
           id: visit.id,
@@ -52,12 +54,30 @@ export class VisitGridComponent implements OnInit {
         this.visitRows.push(visitRow);
       });
       this.rowData = this.visitRows;
-    });
+    }));
   }
 
-  getSelectedRowData() {
-    const selected: VisitRow = this.gridApi.getSelectedRows().pop();
-    this.router.navigate(['/form/visits/'.concat(selected.id)]);
+  private setSelectedRow() {
+    this.selectedRow = this.gridApi.getSelectedRows().pop();
+  }
+
+  private isSelected() {
+    return this.gridApi && this.selectedRow;
+  }
+
+  private updateSelected() {
+    this.router.navigate(['/form/visits/'.concat(this.selectedRow.id)]);
+  }
+
+  private deleteSelected() {
+    this.subscriptions.push(this.restClient.deleteVisit(this.selectedRow.id)
+      .subscribe(() => {
+        this.gridApi.updateRowData({ remove: [this.selectedRow] });
+      }, error => console.log(error)));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

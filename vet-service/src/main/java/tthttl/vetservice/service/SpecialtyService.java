@@ -7,5 +7,6 @@ import java.util.List;
 public interface SpecialtyService {
 
     List<Specialty> findAll();
+    Specialty save(Specialty specialty);
 
 }

@@ -1,64 +1,63 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Specialty, Vet, VetRow} from './vet-model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Vet, VetRow} from './vet-model';
 import {Router} from '@angular/router';
+import {RestClient} from '../services/rest-client.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-vet-grid',
   templateUrl: './vet-grid.component.html',
   styleUrls: ['./vet-grid.component.scss']
 })
-export class VetGridComponent implements OnInit {
+export class VetGridComponent implements OnInit, OnDestroy {
 
   private gridApi;
 
   columnDefs = [
-    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true },
+    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, checkboxSelection: true },
     { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true },
     { headerName: 'Specialties', field: 'specialties', sortable: true, filter: true }
   ];
 
-  rowData: any;
-  vetRows: VetRow[] = [];
+  private rowData: any;
+  private vetRows: VetRow[] = [];
+  private selected: VetRow;
+  private subscriptions: Subscription[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private router: Router) { }
+    private router: Router,
+    private restClient: RestClient) { }
 
   onGridReady(params) {
     this.gridApi = params.api;
   }
 
   ngOnInit() {
-    this.httpClient.get('http://localhost:8080/vets').subscribe((data: Vet[]) => {
-      data.map(vet => {
-        const row: VetRow = {
-          id: vet.id,
-          firstName: vet.firstName,
-          lastName: vet.lastName,
-          specialties: this.appendSpecialties(vet.specialties)
-        };
-        this.vetRows.push(row);
-      });
+    this.subscriptions.push(this.restClient.getVets().subscribe((data: Vet[]) => {
+      data.forEach(vet => this.vetRows.push(this.restClient.mapToVetRow(vet)));
       this.rowData = this.vetRows;
-    });
+    }));
   }
 
-  private appendSpecialties(specialties: Specialty[]) {
-    let result = '';
-    specialties.forEach((specialty, index) => {
-      if (index > 0) {
-        result = result.concat(', ' + specialty.name);
-      } else {
-        result = result.concat(specialty.name);
-      }
-    });
-    return result;
+  private setSelectedRow() {
+    this.selected = this.gridApi.getSelectedRows().pop();
   }
 
-  getSelectedRowData() {
-    const selected: VetRow = this.gridApi.getSelectedRows().pop();
-    this.router.navigate(['/form/vets/'.concat(selected.id)]);
+  private updateSelected() {
+    this.router.navigate(['/form/vets/'.concat(this.selected.id)]);
+  }
+
+  private deleteSelected() {
+    this.subscriptions.push(this.restClient.deleteVet(this.selected.id)
+      .subscribe(() => this.gridApi.updateRowData({ remove: [this.selected] })));
+  }
+
+  private isSelected() {
+    return this.gridApi && this.selected;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

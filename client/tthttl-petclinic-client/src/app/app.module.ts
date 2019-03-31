@@ -15,6 +15,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {PetFormComponent} from './pet-form/pet-form.component';
 import {VetFormComponent} from './vet-form/vet-form.component';
 import {VisitFormComponent} from './visit-form/visit-form.component';
+import {RestClient} from './services/rest-client.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import {VisitFormComponent} from './visit-form/visit-form.component';
     AgGridModule.withComponents([]),
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [RestClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

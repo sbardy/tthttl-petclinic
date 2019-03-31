@@ -1,8 +1,9 @@
+<br>
 <h2>Visit Details</h2>
 <form class="formGroup" [formGroup]="visitFormGroup" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="date">Date</label>
-    <input type="text" class="form-control" id="date" formControlName="date" placeholder="e.g.: 2000-01-01" required>
+    <input type="date" class="form-control" id="date" formControlName="date" placeholder="e.g.: 2000-01-01" required>
   </div>
   <div class="form-group">
     <label for="description">Description</label>
@@ -11,8 +12,8 @@
   <div class="form-group">
     <label for="pet">Pet</label>
     <select class="custom-select" formControlName="pet">
-      <option selected>Please select</option>
-      <option *ngFor="let pet of pets" [class.selected]="pet.id === selectedId" [ngValue]="pet">
+      <option selected [disabled]="isUpdate">Please select</option>
+      <option *ngFor="let pet of pets" [class.selected]="pet.id === selectedId" [ngValue]="pet" [disabled]="isUpdate">
         {{pet.name}} ({{pet.owner}})</option>
     </select>
   </div>

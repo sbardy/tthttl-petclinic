@@ -26,7 +26,7 @@ public class Vet {
     @NotEmpty
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "vets_specialties",
             joinColumns = @JoinColumn(name = "vets_id"),

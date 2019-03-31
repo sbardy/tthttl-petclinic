@@ -1,15 +1,15 @@
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (1, 'jack', 'russel', 'bark street', 'dogville', '0620134567');
+values (1, 'Jack', 'London', 'Bark street', 'Dogville', '062013456');
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (2, 'richard', 'lionheart', 'kings cross', 'sherwood', '0620133267');
+values (2, 'Richard', 'Lionheart', 'Kings cross', 'Sherwood', '062013326');
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (3, 'old', 'lady', 'silenthill', 'california', '0620224567');
+values (3, 'Old', 'Lady', 'Silenthill', 'California', '062022456');
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (4, 'john', 'only', 'baker street', 'london', '0620137767');
+values (4, 'Sherlock', 'Holmes', 'Baker street', 'London', '062013776');
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (5, 'mr', 'x', 'classified', 'area 51', '0620135267');
+values (5, 'Mr', 'X', 'Classified', 'Area 51', '067913526');
 INSERT INTO owners (id, first_name, last_name, address, city, telephone)
-values (6, 'john', 'doe', 'murder scene', 'miami', '0620137767');
+values (6, 'John', 'Doe', 'Murder scene', 'Miami', '062013776');
 
 INSERT INTO pet_types (id, name)
 VALUES (1, 'cat');

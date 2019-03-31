@@ -1,3 +1,4 @@
+<br>
 <h2>Owner Details</h2>
 <form class="formGroup" [formGroup]="ownerFormGroup" (ngSubmit)="onSubmit()">
   <div class="form-group">
@@ -20,5 +21,6 @@
     <label for="telephone">Phone Number</label>
     <input type="text" class="form-control" id="telephone" placeholder="e.g.: 791234567" formControlName="telephone" required>
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="!ownerFormGroup.valid">Create</button>
+  <button *ngIf="!isUpdate" type="submit" class="btn btn-primary" [disabled]="!ownerFormGroup.valid">Create</button>
+  <button *ngIf="isUpdate" type="submit" class="btn btn-primary" [disabled]="!ownerFormGroup.valid">Update</button>
 </form>

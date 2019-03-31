@@ -1,26 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Pet} from '../customer-grid/customer.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Visit, VisitRequestBody} from '../visit-grid/visit.model';
+import {RestClient} from '../services/rest-client.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-visit-form',
   templateUrl: './visit-form.component.html',
   styleUrls: ['./visit-form.component.scss']
 })
-export class VisitFormComponent implements OnInit {
+export class VisitFormComponent implements OnInit, OnDestroy {
 
   constructor(
-    private httpClient: HttpClient,
+    private restClient: RestClient,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
 
-  pets: Pet[] = [];
-  isUpdate: boolean;
-  visitId: string;
+  private pets: Pet[] = [];
+  private isUpdate: boolean;
+  private visitId: string;
+  private subscriptions: Subscription[] = [];
 
   visitFormGroup = new FormGroup({
     date: new FormControl('', Validators.required),
@@ -29,20 +31,20 @@ export class VisitFormComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.httpClient.get('http://localhost:8080/pets').subscribe((pets: Pet[]) => {
+    this.subscriptions.push(this.restClient.getPets().subscribe((pets: Pet[]) => {
       this.pets = pets;
-      this.activatedRoute.params.subscribe(params => {
+      this.subscriptions.push(this.activatedRoute.params.subscribe(params => {
         this.visitId = params.id;
         if (this.visitId) {
-          this.httpClient.get('http://localhost:8080/visits/'.concat(this.visitId)).subscribe((visit: Visit) => {
+          this.subscriptions.push(this.restClient.getVisit(this.visitId).subscribe((visit: Visit) => {
             this.isUpdate = true;
             this.visitFormGroup.controls.date.setValue(visit.date);
             this.visitFormGroup.controls.description.setValue(visit.description);
             this.visitFormGroup.controls.pet.patchValue(this.pets.find(pet => pet.id === visit.petId));
-          });
+          }));
         }
-      });
-    });
+      }));
+    }));
   }
 
   onSubmit() {
@@ -52,20 +54,24 @@ export class VisitFormComponent implements OnInit {
       petId: this.visitFormGroup.controls.pet.value.id
     };
     if (this.isUpdate) {
-      this.httpClient.put('http://localhost:8080/visits/'.concat(this.visitId), visitToSave)
+      this.subscriptions.push(this.restClient.updateVisit(this.visitId, visitToSave)
         .subscribe(data => {
           console.log(data);
           this.router.navigate(['/visits']);
         },
-          error => console.log(error));
+          error => console.log(error)));
     } else {
-      this.httpClient.post('http://localhost:8080/visits', visitToSave)
+      this.subscriptions.push(this.restClient.saveVisit(visitToSave)
         .subscribe(data => {
           console.log(data);
           this.router.navigate(['/visits']);
         },
-          error => console.log(error));
+          error => console.log(error)));
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

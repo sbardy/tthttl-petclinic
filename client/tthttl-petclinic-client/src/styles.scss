@@ -1,14 +1,40 @@
-
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~ag-grid-community/dist/styles/ag-grid.css";
 @import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "~ag-grid-community/dist/styles/ag-theme-fresh.css";
 
-.formGroup{
-    position: relative;
-    width: 40%;
-    margin: auto;
+$body-background: #c8edf4;
+$navbar-background: #4fb3c6;
+
+.formGroup {
+  position: relative;
+  width: 40%;
+  margin: auto;
 }
 
-h2{
-    text-align: center;    
+h2 {
+  text-align: center;
+}
+
+body {
+  background-color: $body-background;
+}
+
+.navbar {
+  background-color: $navbar-background !important;
+}
+
+ag-grid-angular {
+  width: fit-content;
+}
+
+.grid-container {
+  position: relative;
+  width: fit-content;
+  margin: auto;
+}
+
+.btn {
+  margin-right: 5px;
+  margin-bottom: 5px;
 }

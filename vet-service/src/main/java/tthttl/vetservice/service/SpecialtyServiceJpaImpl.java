@@ -21,4 +21,9 @@ public class SpecialtyServiceJpaImpl implements SpecialtyService {
     public List<Specialty> findAll() {
         return this.specialtyRepository.findAll();
     }
+
+    @Override
+    public Specialty save(Specialty specialty) {
+        return specialtyRepository.save(specialty);
+    }
 }

@@ -60,7 +60,6 @@ class VetControllerTest {
 
     @Test
     void saveVet() throws Exception {
-        when(specialtyService.findAll()).thenReturn(Collections.singletonList(savedSpecialty));
         when(vetService.save(any())).thenReturn(vet);
 
         mockMvc.perform
@@ -80,8 +79,11 @@ class VetControllerTest {
     @Test
     void saveVetWithExistingAndNewSpecialties() throws Exception {
         vet.setSpecialties(new HashSet<>(Arrays.asList(savedSpecialty, new Specialty(null, "newSpecialty"))));
-        when(specialtyService.findAll()).thenReturn(Collections.singletonList(savedSpecialty));
-        when(vetService.save(any())).thenReturn(vet);
+        Specialty specialtyWithId = new Specialty(4L, "newSpecialty");
+        when(specialtyService.save(any())).thenReturn(specialtyWithId);
+        Vet returnedVet = createVet();
+        returnedVet.setSpecialties(new HashSet<>(Arrays.asList(savedSpecialty, specialtyWithId)));
+        when(vetService.save(any())).thenReturn(returnedVet);
 
         mockMvc.perform
                 (post("/vets")
@@ -91,7 +93,9 @@ class VetControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", is(vet.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(vet.getLastName())))
-                .andExpect(jsonPath("$.specialties", Matchers.hasSize(2)));
+                .andExpect(jsonPath("$.specialties", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.specialties[*].id", Matchers.containsInAnyOrder(1, 4)))
+                .andExpect(jsonPath("$.specialties[*].name", Matchers.containsInAnyOrder("petDoctor", "newSpecialty")));
     }
 
     @Test

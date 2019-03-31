@@ -12,9 +12,9 @@ import tthttl.vetservice.service.VetService;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vets")
@@ -30,7 +30,7 @@ public class VetController {
 
     @PostMapping
     public ResponseEntity<Vet> saveVet(@Valid @RequestBody Vet vet) {
-        vet.setSpecialties(reAttachExistingSpecialties(vet.getSpecialties()));
+        saveSpecialties(vet);
         Vet savedVet = vetService.save(vet);
         URI location = MvcUriComponentsBuilder
                 .fromController(getClass())
@@ -57,6 +57,7 @@ public class VetController {
                                       @Valid @RequestBody Vet vetToCopy) {
         return vetService.findById(id)
                 .map(vetToUpdate -> {
+                    saveSpecialties(vetToCopy);
                     Vet updatedVet = vetService.save(Vet.update(vetToUpdate, vetToCopy));
                     URI location = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
                     return ResponseEntity.created(location).body(updatedVet);
@@ -79,21 +80,16 @@ public class VetController {
         return ResponseEntity.ok().body(specialtyService.findAll());
     }
 
-    private Set<Specialty> reAttachExistingSpecialties(Set<Specialty> mixedSpecialties){
-        List<Specialty> existingSpecialties = specialtyService.findAll();
-        Set<Specialty> specialtiesToSave = new HashSet<>();
-        mixedSpecialties.forEach(specialty -> {
-            if(specialty.getId() != null){
-                Specialty matchingSpecialty = existingSpecialties.stream()
-                        .filter(existing -> existing.getId().equals(specialty.getId()))
-                        .findFirst()
-                        .get();
-                specialtiesToSave.add(matchingSpecialty);
-            } else {
-                specialtiesToSave.add(specialty);
-            }
-        });
-        return specialtiesToSave;
+    private void saveSpecialties(Vet vetToCopy){
+        Set<Specialty> savedSpecialties = vetToCopy.getSpecialties().stream()
+                .map(specialty -> {
+                    if (specialty.getId() == null) {
+                        return specialtyService.save(specialty);
+                    }
+                    return specialty;
+                })
+                .collect(Collectors.toSet());
+        vetToCopy.setSpecialties(savedSpecialties);
     }
 
 }
