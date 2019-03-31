@@ -6,4 +6,4 @@ WORKDIR ${WORKDIR}
 ADD /target/discovery-service-0.0.1-SNAPSHOT.jar ${WORKDIR}
 EXPOSE 8761
 ENTRYPOINT ["java"]
-CMD ["-jar", "discovery-service-0.0.1-SNAPSHOT.jar"] 
+CMD ["-jar", "-Dspring.profiles.active=docker", "discovery-service-0.0.1-SNAPSHOT.jar"]
