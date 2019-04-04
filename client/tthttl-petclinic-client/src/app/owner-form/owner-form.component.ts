@@ -25,7 +25,7 @@ export class OwnerFormComponent implements OnInit, OnDestroy {
     telephone: new FormControl('', [Validators.required, Validators.pattern('[0-9]{9}')])
   });
 
-  private isUpdate: boolean;
+  isUpdate: boolean;
   private ownerId: string;
   private subscriptions: Subscription[] = [];
 

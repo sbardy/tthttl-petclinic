@@ -19,10 +19,10 @@ export class VisitFormComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute
   ) { }
 
-  private pets: Pet[] = [];
-  private isUpdate: boolean;
-  private visitId: string;
-  private subscriptions: Subscription[] = [];
+   pets: Pet[] = [];
+   isUpdate: boolean;
+   visitId: string;
+   subscriptions: Subscription[] = [];
 
   visitFormGroup = new FormGroup({
     date: new FormControl('', Validators.required),

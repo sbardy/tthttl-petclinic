@@ -15,9 +15,9 @@ export class VisitGridComponent implements OnInit, OnDestroy {
     private restClient: RestClient,
     private router: Router) { }
 
-  private gridApi;
-  private selectedRow: VisitRow;
-  private subscriptions: Subscription[] = [];
+   gridApi;
+   selectedRow: VisitRow;
+   subscriptions: Subscription[] = [];
 
   columnDefs = [
     {
@@ -34,8 +34,8 @@ export class VisitGridComponent implements OnInit, OnDestroy {
     }
   ];
 
-  private rowData: any;
-  private visitRows: VisitRow[] = [];
+   rowData: any;
+   visitRows: VisitRow[] = [];
 
   onGridReady(params) {
     this.gridApi = params.api;
@@ -57,19 +57,19 @@ export class VisitGridComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private setSelectedRow() {
+  setSelectedRow() {
     this.selectedRow = this.gridApi.getSelectedRows().pop();
   }
 
-  private isSelected() {
+  isSelected() {
     return this.gridApi && this.selectedRow;
   }
 
-  private updateSelected() {
+  updateSelected() {
     this.router.navigate(['/form/visits/'.concat(this.selectedRow.id)]);
   }
 
-  private deleteSelected() {
+  deleteSelected() {
     this.subscriptions.push(this.restClient.deleteVisit(this.selectedRow.id)
       .subscribe(() => {
         this.gridApi.updateRowData({ remove: [this.selectedRow] });

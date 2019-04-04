@@ -18,13 +18,13 @@ export class PetFormComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute
   ) { }
 
-  private petTypes: PetType[] = [];
-  private owners: Owner[] = [];
+  petTypes: PetType[] = [];
+  owners: Owner[] = [];
 
-  private isUpdate: boolean;
-  private petId: string;
-  private currentOwnerId: string;
-  private subscriptions: Subscription[] = [];
+  isUpdate: boolean;
+  petId: string;
+  currentOwnerId: string;
+  subscriptions: Subscription[] = [];
 
   petFormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -54,7 +54,7 @@ export class PetFormComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private matchOwnerWithPet(): Owner {
+  matchOwnerWithPet(): Owner {
     let matchingOwner: Owner;
     this.owners.forEach(owner => {
       const foundPet = owner.pets.find(pet => pet.id.toString() === this.petId);

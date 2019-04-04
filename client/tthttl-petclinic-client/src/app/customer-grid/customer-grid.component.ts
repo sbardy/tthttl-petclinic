@@ -25,7 +25,7 @@ export class CustomerGridComponent implements OnInit, OnDestroy {
   ];
 
   private ownerApi;
-  private rowDataOwners: any;
+  rowDataOwners: any;
   private ownerRows: OwnerRow[] = [];
   private selectedOwnerRow: OwnerRow;
 
@@ -37,7 +37,7 @@ export class CustomerGridComponent implements OnInit, OnDestroy {
   ];
 
   private petApi;
-  private rowDataPets: any;
+  rowDataPets: any;
   private petRows: PetRow[] = [];
   private selectedPetRow: PetRow;
   private subscriptions: Subscription[] = [];
@@ -55,21 +55,21 @@ export class CustomerGridComponent implements OnInit, OnDestroy {
     this.initRowDataPets();
   }
 
-  private initRowDataOwners() {
+  initRowDataOwners() {
     this.subscriptions.push(this.restClient.getOwners().subscribe((owners: Owner[]) => {
       owners.forEach(owner => this.ownerRows.push(this.restClient.mapOwnerToRow(owner)));
       this.rowDataOwners = this.ownerRows;
     }));
   }
 
-  private initRowDataPets() {
+  initRowDataPets() {
     this.subscriptions.push(this.restClient.getPets().subscribe((pets: Pet[]) => {
       pets.forEach(pet => this.petRows.push(this.restClient.mapPetToPetRow(pet)));
       this.rowDataPets = this.petRows;
     }));
   }
 
-  private deleteSelectedOwner() {
+  deleteSelectedOwner() {
     this.subscriptions.push(this.restClient.deleteOwner(this.selectedOwnerRow.id).subscribe(() => {
       this.ownerApi.updateRowData({ remove: [this.selectedOwnerRow] });
       this.subscriptions.push(this.restClient.getPets().subscribe((pets: Pet[]) => {
@@ -79,7 +79,7 @@ export class CustomerGridComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private deleteSelectedPet() {
+  deleteSelectedPet() {
     this.subscriptions.push(this.restClient.deletePet(this.selectedPetRow.id).subscribe(() => {
       this.petApi.updateRowData({ remove: [this.selectedPetRow] });
       this.subscriptions.push(this.restClient.getOwners().subscribe((owners: Owner[]) => {
@@ -89,27 +89,27 @@ export class CustomerGridComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private setSelectedOwnerRow() {
+  setSelectedOwnerRow() {
     this.selectedOwnerRow = this.ownerApi.getSelectedRows().pop();
   }
 
-  private updateSelectedOwner() {
+  updateSelectedOwner() {
     this.router.navigate(['/form/owners/'.concat(this.selectedOwnerRow.id)]);
   }
 
-  private isOwnerSelected() {
+  isOwnerSelected() {
     return this.ownerApi && this.selectedOwnerRow;
   }
 
-  private isPetSelected() {
+  isPetSelected() {
     return this.petApi && this.selectedPetRow;
   }
 
-  private setSelectedPetRow() {
+  setSelectedPetRow() {
     this.selectedPetRow = this.petApi.getSelectedRows().pop();
   }
 
-  private updateSelectedPet() {
+  updateSelectedPet() {
     this.router.navigate(['/form/pets/'.concat(this.selectedPetRow.id)]);
   }
 

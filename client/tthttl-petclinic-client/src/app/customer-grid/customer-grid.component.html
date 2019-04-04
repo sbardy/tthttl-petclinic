@@ -11,7 +11,7 @@
     [rowData]="rowDataOwners"
     [columnDefs]="columnDefsOwners"
     [rowSelection]="'single'"
-    (selectionChanged)="setSelectedOwnerRow($event)"
+    (selectionChanged)="setSelectedOwnerRow()"
     (gridReady)="onOwnerGridReady($event)"
     suppressCellSelection="true"
     >
@@ -30,7 +30,7 @@
     [rowData]="rowDataPets"
     [columnDefs]="columnDefsPets"
     [rowSelection]="'single'"
-    (selectionChanged)="setSelectedPetRow($event)"
+    (selectionChanged)="setSelectedPetRow()"
     (gridReady)="onPetGridReady($event)"
     suppressCellSelection="true"
     >

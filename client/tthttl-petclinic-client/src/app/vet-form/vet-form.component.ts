@@ -12,9 +12,9 @@ import {Subscription} from 'rxjs';
 })
 export class VetFormComponent implements OnInit, OnDestroy {
 
-  private specialties: Specialty[] = [];
-  private isUpdate: boolean;
-  private vetId: string;
+  specialties: Specialty[] = [];
+  isUpdate: boolean;
+  vetId: string;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -22,7 +22,7 @@ export class VetFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute) { }
 
-  private vetFormGroup = new FormGroup({
+  vetFormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     specialties: new FormControl('', Validators.required)
@@ -66,7 +66,7 @@ export class VetFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private specialtyArrayToString(specialties: Specialty[]): string {
+  specialtyArrayToString(specialties: Specialty[]): string {
     let result = '';
     specialties.forEach((specialty, index) => {
       if (index > 0) {
@@ -78,7 +78,7 @@ export class VetFormComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  private parseSpecialties(controlValue: string): Specialty[] {
+  parseSpecialties(controlValue: string): Specialty[] {
     const inputStrings: string[] = controlValue.split(',');
     const result: Specialty[] = [];
     inputStrings

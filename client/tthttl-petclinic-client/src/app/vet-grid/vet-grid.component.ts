@@ -19,7 +19,7 @@ export class VetGridComponent implements OnInit, OnDestroy {
     { headerName: 'Specialties', field: 'specialties', sortable: true, filter: true }
   ];
 
-  private rowData: any;
+  rowData: any;
   private vetRows: VetRow[] = [];
   private selected: VetRow;
   private subscriptions: Subscription[] = [];
@@ -39,20 +39,20 @@ export class VetGridComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private setSelectedRow() {
+  setSelectedRow() {
     this.selected = this.gridApi.getSelectedRows().pop();
   }
 
-  private updateSelected() {
+  updateSelected() {
     this.router.navigate(['/form/vets/'.concat(this.selected.id)]);
   }
 
-  private deleteSelected() {
+  deleteSelected() {
     this.subscriptions.push(this.restClient.deleteVet(this.selected.id)
       .subscribe(() => this.gridApi.updateRowData({ remove: [this.selected] })));
   }
 
-  private isSelected() {
+  isSelected() {
     return this.gridApi && this.selected;
   }
 

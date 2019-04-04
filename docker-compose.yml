@@ -1,14 +1,14 @@
 version: "3.1"
 services:
     config-service:
-        build: ./config-service/.
+        #build: ./config-service/.
         image: tthttl/config-service
         ports:
             - "8888:8888"
         networks:
             - internal
     discovery-service:
-        build: ./discovery-service/.
+        #build: ./discovery-service/.
         image: tthttl/discovery-service
         ports:
             - "8761:8761"
@@ -17,7 +17,7 @@ services:
         networks:
             - internal
     gateway-service:
-        build: ./gateway-service/.
+        #build: ./gateway-service/.
         image: tthttl/gateway-service
         ports:
             - "8080:8080"
@@ -44,7 +44,7 @@ services:
             - ./customer-service:/docker-entrypoint-initdb.d
             - customer-data:/var/lib/mysql
     customer-service:
-        build: ./customer-service/.
+        #build: ./customer-service/.
         image: tthttl/customer-service
         ports:
             - "8081:8081"
@@ -66,7 +66,7 @@ services:
             - ./vet-service:/docker-entrypoint-initdb.d
             - vet-data:/var/lib/mysql
     vet-service:
-        build: ./vet-service/.
+        #build: ./vet-service/.
         image: tthttl/vet-service
         ports:
             - "8090:8090"
@@ -88,7 +88,7 @@ services:
             - ./visit-service:/docker-entrypoint-initdb.d
             - visit-data:/var/lib/mysql
     visit-service:
-        build: ./visit-service/.
+        #build: ./visit-service/.
         image: tthttl/visit-service
         ports:
             - "9000:9000"
@@ -96,6 +96,13 @@ services:
             - config-service
             - discovery-service
             - visit-db
+        networks:
+            - internal
+    client-service:
+        #build: ./client/tthttl-petclinic-client/.
+        image: tthttl/petclinic-client
+        ports:
+            - "4200:80"
         networks:
             - internal
 volumes:

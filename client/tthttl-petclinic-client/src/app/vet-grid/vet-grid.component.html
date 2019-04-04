@@ -6,6 +6,6 @@
     <button type="button" class="btn btn-outline-info btn-sm" [disabled]="!isSelected()"
         (click)="deleteSelected()">Delete selected</button>
     <ag-grid-angular class="ag-theme-fresh" [rowData]="rowData" [columnDefs]="columnDefs" [rowSelection]="'single'"
-        (selectionChanged)="setSelectedRow($event)" (gridReady)="onGridReady($event)" suppressCellSelection="true">
+        (selectionChanged)="setSelectedRow()" (gridReady)="onGridReady($event)" suppressCellSelection="true">
     </ag-grid-angular>
 </div>
