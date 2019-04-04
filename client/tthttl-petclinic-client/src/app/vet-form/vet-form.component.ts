@@ -54,16 +54,13 @@ export class VetFormComponent implements OnInit, OnDestroy {
       specialties: this.parseSpecialties(this.vetFormGroup.controls.specialties.value)
     };
     if (this.isUpdate) {
-      console.log(vetToSave);
       this.subscriptions.push(this.restClient.updateVet(this.vetId, vetToSave)
         .subscribe(data => {
-          console.log(data);
           this.router.navigate(['/vets']);
         }, error => console.log(error)));
     } else {
       this.subscriptions.push(this.restClient.saveVet(vetToSave)
         .subscribe(data => {
-          console.log(data);
           this.router.navigate(['/vets']);
         }, error => console.log(error)));
     }
