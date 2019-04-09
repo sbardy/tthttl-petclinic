@@ -12,7 +12,7 @@ Client-side: angular 7, ag-grid, bootstrap.
 Start up the services one-by-one: **mvn spring-boot:run**  
 Start the client: **npm install** => **ng serve**  
 
-- Angular7 frontend - http:/localhost:4200
+- Angular7 frontend - http://localhost:4200
 - Discovery Server - http://localhost:8761
 - Config Server - http://localhost:8888
 - API Gateway - http://localhost:8080
