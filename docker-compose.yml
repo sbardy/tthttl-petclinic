@@ -54,6 +54,11 @@ services:
             - customer-db
         networks:
             - internal
+        environment:
+            WAIT_HOSTS: customer-db:3306
+            WAIT_BEFORE_HOSTS: 30
+            WAIT_HOSTS_TIMEOUT: 1000
+            WAIT_SLEEP_INTERVAL: 30
     vet-db:
         image: mysql
         restart: always
@@ -76,6 +81,12 @@ services:
             - vet-db
         networks:
             - internal
+        environment:
+            WAIT_HOSTS: vet-db:3306
+            WAIT_BEFORE_HOSTS: 30
+            WAIT_HOSTS_TIMEOUT: 1000
+            WAIT_SLEEP_INTERVAL: 30
+
     visit-db:
         image: mysql
         restart: always
@@ -98,6 +109,11 @@ services:
             - visit-db
         networks:
             - internal
+        environment:
+            WAIT_HOSTS: visit-db:3306
+            WAIT_BEFORE_HOSTS: 30
+            WAIT_HOSTS_TIMEOUT: 1000
+            WAIT_SLEEP_INTERVAL: 30
     client-service:
         #build: ./client/tthttl-petclinic-client/.
         image: tthttl/petclinic-client
